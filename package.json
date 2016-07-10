@@ -1,0 +1,11 @@
+{
+  "name": "fs-web",
+  "version": "1.0.0",
+  "description": "file system on browser",
+  "main": "fileApi.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mingtao Fu",
+  "license": "ISC"
+}
