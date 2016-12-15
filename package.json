@@ -4,8 +4,16 @@
   "description": "file system on browser",
   "main": "fileApi.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "default": "webpack --watch"
   },
   "author": "Mingtao Fu",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.9.0"
+  }
 }

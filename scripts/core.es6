@@ -1,4 +1,55 @@
-var fs;
+class FS {
+  constructor() {
+    var that = this;
+    window.webkitRequestFileSystem(TEMPORARY, 1024*1024, function (filesystem) {
+      that._instance = filesystem;
+      that.subDirs = [];
+      that._setRoot();
+    });
+  }
+  ls() {
+    for(var i = 0, file; file = this.subDirs[i]; i++) {
+      console.log(file.name);
+    }
+  }
+  cd(dirName) {
+    for(var i = 0, file; file = this.subDirs[i]; i++) {
+      if(file.name === dirName) {
+        if(!file.isDirectory) {
+          console.log("not a dir");
+          return false;
+        } else {
+          this.currentDir = file;
+          this._refresh();
+          return true;
+        }
+      }
+    }
+    console.log("cannot find");
+    return false;
+  }
+  mkdir(dirName, callback, logerr) {
+    var that = this;
+    this.currentDir.getDirectory(dirName, {create: true, exclusive: true}, function () {
+      that._refresh();
+    }, logerr);
+  }
+  _refresh() {
+    var reader = this.currentDir.createReader();
+    var that = this;
+    reader.readEntries(function (results) {
+      that.subDirs = results;
+    });
+  }
+  _setRoot() {
+    var rootReader = this._instance.root.createReader();
+    this.currentDir = this._instance.root;
+    var that = this;
+    rootReader.readEntries(function (results) {
+      that.subDirs = results;
+    });
+  }
+}
 function initFs() {
   window.webkitRequestFileSystem(
     TEMPORARY,
@@ -66,11 +117,10 @@ function initFs() {
   )
 }
 
-window.onload = function() {
   var fileInput = document.querySelector("#file");
   fileInput.onchange = function(e) {
     var files = this.files;
     initFs(files);
-  }
-};
-initFs();
+  };
+
+module.exports = FS;
